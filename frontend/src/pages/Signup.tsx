@@ -47,15 +47,15 @@ export default function Signup({ onLoginSuccess }: SignupProps) {
     <div className="auth-page">
       <div className="auth-card">
         <div className="auth-header">
-          <h1 className="logo" style={{ justifyContent: 'center', marginBottom: '1rem' }}>
-            Spreetail
+          <h1 className="logo" style={{ justifyContent: 'center', marginBottom: '1.25rem', fontSize: '2rem' }}>
+            <span>⚡</span> Spreetail
           </h1>
           <h2 className="auth-title">Create Account</h2>
           <p className="auth-subtitle">Get started tracking shared flat expenses.</p>
         </div>
 
         {error && (
-          <div className="badge badge-danger" style={{ display: 'block', width: '100%', padding: '0.75rem', borderRadius: '6px', marginBottom: '1.25rem', textAlign: 'left' }}>
+          <div className="badge badge-danger" style={{ display: 'flex', width: '100%', padding: '0.85rem 1rem', borderRadius: '8px', marginBottom: '1.5rem', textAlign: 'left', fontSize: '0.85rem' }}>
             {error}
           </div>
         )}
@@ -124,7 +124,7 @@ export default function Signup({ onLoginSuccess }: SignupProps) {
           <button
             type="submit"
             className="btn btn-primary"
-            style={{ width: '100%', marginTop: '0.5rem' }}
+            style={{ width: '100%', marginTop: '0.75rem', padding: '0.75rem' }}
             disabled={loading}
           >
             {loading ? 'Creating account...' : 'Create Account'}
@@ -132,9 +132,9 @@ export default function Signup({ onLoginSuccess }: SignupProps) {
           </button>
         </form>
 
-        <p className="auth-subtitle" style={{ textAlign: 'center', marginTop: '1.5rem' }}>
+        <p className="auth-subtitle" style={{ textAlign: 'center', marginTop: '1.75rem' }}>
           Already have an account?{' '}
-          <Link to="/login" style={{ color: 'var(--primary)', fontWeight: 600, textDecoration: 'none' }}>
+          <Link to="/login" style={{ color: 'var(--primary)', fontWeight: 600, textDecoration: 'none', transition: 'color 0.2s' }} onMouseEnter={(e) => e.currentTarget.style.color = 'var(--primary-hover)'} onMouseLeave={(e) => e.currentTarget.style.color = 'var(--primary)'}>
             Sign In
           </Link>
         </p>

@@ -295,26 +295,26 @@ export default function ImportWizard() {
 
   return (
     <div className="main-content">
-      <div style={{ marginBottom: '1.5rem' }}>
-        <Link to={`/groups/${groupId}`} style={{ color: 'var(--text-secondary)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.875rem' }}>
-          <ArrowLeft size={12} /> Back to Group Dashboard
+      <div style={{ marginBottom: '2rem' }}>
+        <Link to={`/groups/${groupId}`} style={{ color: 'var(--text-secondary)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.9rem', transition: 'color 0.2s' }} onMouseEnter={(e) => e.currentTarget.style.color = 'var(--text-primary)'} onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-secondary)'}>
+          <ArrowLeft size={14} /> Back to Group Dashboard
         </Link>
-        <h1 style={{ fontSize: '2.25rem', margin: '0.5rem 0 0.25rem 0' }}>CSV Import Wizard</h1>
-        <p style={{ color: 'var(--text-secondary)' }}>Import bills from spreadsheet export into <b>{group.name}</b>.</p>
+        <h1 style={{ fontSize: '2.5rem', margin: '0.5rem 0 0.25rem 0', fontWeight: 800, letterSpacing: '-0.02em' }}>CSV Import Wizard</h1>
+        <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>Import bills from spreadsheet export into <b>{group.name}</b>.</p>
       </div>
 
       {error && (
-        <div className="badge badge-danger" style={{ display: 'block', width: '100%', padding: '0.75rem', borderRadius: '6px', marginBottom: '1.5rem', textAlign: 'left' }}>
+        <div className="badge badge-danger" style={{ display: 'flex', width: '100%', padding: '0.85rem 1rem', borderRadius: '8px', marginBottom: '2rem', textAlign: 'left', fontSize: '0.85rem' }}>
           {error}
         </div>
       )}
 
       {/* PHASE 1: NO ACTIVE SESSION (UPLOAD FILE) */}
       {!session ? (
-        <div className="card" style={{ maxWidth: '600px', margin: '0 auto', padding: '3rem 2rem' }}>
-          <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-            <h2 style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>Upload Spreadsheet Export</h2>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem' }}>Select the `expenses_export.csv` file. Our pipeline will parse it and scan for anomalies.</p>
+        <div className="card" style={{ maxWidth: '600px', margin: '3rem auto', padding: '3.5rem 2.5rem', textAlign: 'center' }}>
+          <div style={{ marginBottom: '2.5rem' }}>
+            <h2 style={{ fontSize: '1.75rem', marginBottom: '0.5rem', fontWeight: 600 }}>Upload Spreadsheet Export</h2>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: '1.5' }}>Select the `expenses_export.csv` file. Our pipeline will parse it and scan for anomalies.</p>
           </div>
 
           <label className="upload-zone">
@@ -325,22 +325,24 @@ export default function ImportWizard() {
               style={{ display: 'none' }} 
               disabled={uploading}
             />
-            <Upload className="upload-icon" style={{ margin: '0 auto 1rem auto' }} />
-            <h3>{uploading ? 'Processing file...' : 'Choose CSV File'}</h3>
-            <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.5rem' }}>Only supports .csv files exactly as exported</p>
+            <Upload className="upload-icon" style={{ margin: '0 auto 1.25rem auto' }} />
+            <h3 style={{ fontSize: '1.25rem', fontWeight: 600 }}>{uploading ? 'Processing file...' : 'Choose CSV File'}</h3>
+            <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '0.5rem' }}>Only supports .csv files exactly as exported</p>
           </label>
         </div>
       ) : (
         /* PHASE 2: REVIEW ANOMALIES & COMMITTING */
-        <div>
+        <div style={{ animation: 'fadeIn 0.25s ease-out' }}>
           {/* Steps tracker UI */}
           <div className="wizard-steps">
             <div className="wizard-step completed">
-              <span className="step-num"><Check size={10} /></span>
-              <span>1. Upload CSV</span>
+              <span className="step-num" style={{ borderColor: 'var(--success)', color: 'var(--success)' }}><Check size={12} /></span>
+              <span style={{ color: 'var(--text-primary)' }}>1. Upload CSV</span>
             </div>
-            <div className={`wizard-step ${session.heldRows > 0 ? 'active' : 'completed'}`}>
-              <span className="step-num">{session.heldRows > 0 ? '2' : <Check size={10} />}</span>
+            <div className={`wizard-step ${session.heldRows > 0 ? 'active' : 'completed'}`} style={{ color: session.heldRows > 0 ? 'var(--primary)' : 'var(--success)' }}>
+              <span className="step-num">
+                {session.heldRows > 0 ? '2' : <Check size={12} />}
+              </span>
               <span>2. Resolve Anomalies ({session.heldRows} remaining)</span>
             </div>
             <div className={`wizard-step ${session.heldRows === 0 ? 'active' : ''}`}>
@@ -351,28 +353,28 @@ export default function ImportWizard() {
 
           {/* USD Exchange Rate Warning Panel */}
           {rows.some(r => r.anomalies.some(a => a.code === 'CURRENCY_USD')) && !session.usdToInr && (
-            <div className="card" style={{ border: '1px solid var(--warning-border)', backgroundColor: 'var(--warning-bg)', display: 'flex', flexWrap: 'wrap', gap: '1.5rem', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+            <div className="card" style={{ border: '1px solid var(--warning-border)', backgroundColor: 'var(--warning-bg)', display: 'flex', flexWrap: 'wrap', gap: '1.5rem', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', padding: '1.25rem 1.5rem' }}>
               <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
-                <AlertTriangle style={{ color: 'var(--warning)' }} />
+                <AlertTriangle style={{ color: 'var(--warning)', flexShrink: 0 }} size={24} />
                 <div>
-                  <h4 style={{ color: 'var(--warning)', margin: 0 }}>USD Expenses Detected</h4>
-                  <p style={{ fontSize: '0.8rem', color: 'var(--text-primary)', margin: 0 }}>
+                  <h4 style={{ color: 'var(--warning)', margin: 0, fontSize: '1rem', fontWeight: 600 }}>USD Expenses Detected</h4>
+                  <p style={{ fontSize: '0.85rem', color: 'var(--text-primary)', margin: '0.2rem 0 0 0', lineHeight: '1.4' }}>
                     Please enter the historical exchange rate (USD to INR) to convert Goa trip expenses.
                   </p>
                 </div>
               </div>
-              <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-                <span style={{ fontSize: '0.85rem' }}>1 USD = </span>
+              <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
+                <span style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>1 USD = </span>
                 <input
                   type="number"
                   step="0.01"
                   className="form-input"
-                  style={{ width: '80px', padding: '0.4rem' }}
+                  style={{ width: '90px', padding: '0.5rem' }}
                   value={usdRate}
                   onChange={(e) => setUsdRate(e.target.value)}
                   disabled={settingRate}
                 />
-                <span style={{ fontSize: '0.85rem' }}>INR</span>
+                <span style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>INR</span>
                 <button onClick={handleApplyUsdRate} className="btn btn-primary btn-sm" disabled={settingRate}>
                   {settingRate ? 'Saving...' : 'Apply Rate'}
                 </button>
@@ -381,14 +383,14 @@ export default function ImportWizard() {
           )}
 
           {/* Split Panel Dashboard: Rows list on left, Resolution Form on right */}
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1.5rem', alignItems: 'flex-start' }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '2rem', alignItems: 'flex-start' }}>
             {/* Rows List (Left Column) */}
-            <div style={{ flex: '1 1 480px', maxHeight: '650px', overflowY: 'auto' }}>
-              <h3 style={{ fontSize: '1rem', color: 'var(--text-secondary)', marginBottom: '0.75rem' }}>
+            <div style={{ flex: '1 1 480px', maxHeight: '680px', overflowY: 'auto', paddingRight: '0.25rem' }}>
+              <h3 style={{ fontSize: '1.1rem', color: 'var(--text-secondary)', marginBottom: '1rem', fontWeight: 600 }}>
                 Processed Rows ({rows.length})
               </h3>
               
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                 {rows.map((row) => {
                   const isSelected = selectedRow?.id === row.id;
                   const isHeld = row.status === 'HELD';
@@ -402,34 +404,35 @@ export default function ImportWizard() {
                       onClick={() => handleSelectRow(row)}
                       className="card"
                       style={{
-                        padding: '0.875rem 1.25rem',
+                        padding: '1rem 1.5rem',
                         marginBottom: 0,
                         cursor: 'pointer',
                         borderColor: isSelected ? 'var(--primary)' : isHeld ? 'var(--danger-border)' : 'var(--border-color)',
-                        backgroundColor: isSelected ? 'var(--primary-glow)' : isHeld ? 'rgba(239, 68, 68, 0.02)' : 'var(--bg-card)',
+                        backgroundColor: isSelected ? 'var(--primary-glow)' : isHeld ? 'rgba(239, 68, 68, 0.02)' : 'rgba(17, 24, 39, 0.4)',
+                        boxShadow: isSelected ? 'var(--shadow-glow)' : 'none',
                         display: 'flex',
                         justifyContent: 'space-between',
                         alignItems: 'center',
-                        transition: 'all 0.15s'
+                        transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)'
                       }}
                     >
-                      <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-                        <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-secondary)', width: '45px' }}>
+                      <div style={{ display: 'flex', gap: '1.25rem', alignItems: 'center' }}>
+                        <span style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-muted)', width: '45px' }}>
                           Row {row.rowNumber}
                         </span>
                         <div>
-                          <strong style={{ fontSize: '0.9rem' }}>{row.rawData.description || 'Imported Row'}</strong>
-                          <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
+                          <strong style={{ fontSize: '0.95rem', color: 'var(--text-primary)' }}>{row.rawData.description || 'Imported Row'}</strong>
+                          <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '0.2rem' }}>
                             Payer: {row.rawData.paid_by || '(blank)'} | Amount: {row.rawData.currency || ''} {row.rawData.amount}
                           </p>
                         </div>
                       </div>
 
                       <div>
-                        {isHeld && <span className="badge badge-danger">Held</span>}
-                        {isImported && <span className="badge badge-success">Cleaned</span>}
-                        {isSkipped && <span className="badge badge-warning">Skipped</span>}
-                        {isRejected && <span className="badge badge-danger" style={{ opacity: 0.6 }}>Rejected</span>}
+                        {isHeld && <span className="badge badge-danger" style={{ padding: '0.2rem 0.55rem' }}>Held</span>}
+                        {isImported && <span className="badge badge-success" style={{ padding: '0.2rem 0.55rem' }}>Cleaned</span>}
+                        {isSkipped && <span className="badge badge-warning" style={{ padding: '0.2rem 0.55rem' }}>Skipped</span>}
+                        {isRejected && <span className="badge badge-danger" style={{ opacity: 0.6, padding: '0.2rem 0.55rem' }}>Rejected</span>}
                       </div>
                     </div>
                   );
@@ -440,23 +443,23 @@ export default function ImportWizard() {
             {/* Resolution Form (Right Column) */}
             <div style={{ flex: '1 1 440px', position: 'sticky', top: '90px' }}>
               {selectedRow ? (
-                <div className="card" style={{ border: '1px solid var(--border-color)' }}>
-                  <h3 className="card-title" style={{ borderBottom: '1px solid var(--border-color)', paddingBottom: '0.5rem' }}>
+                <div className="card" style={{ borderColor: 'var(--border-color)', border: '1px solid var(--border-color)', animation: 'slideUp 0.3s ease-out' }}>
+                  <h3 className="card-title" style={{ borderBottom: '1px solid var(--border-color)', paddingBottom: '0.75rem', marginBottom: '1.25rem' }}>
                     <span>Resolve Row {selectedRow.rowNumber} Anomaly</span>
                     <span className="badge badge-danger">Review</span>
                   </h3>
                   
                   {/* Raw row values info */}
-                  <div style={{ fontSize: '0.75rem', backgroundColor: 'var(--bg-input)', padding: '0.75rem', borderRadius: '6px', marginBottom: '1.25rem' }}>
-                    <div style={{ display: 'grid', gridTemplateColumns: '80px 1fr', gap: '0.25rem' }}>
-                      <span style={{ color: 'var(--text-muted)' }}>Raw Description:</span>
-                      <span style={{ color: 'var(--text-primary)' }}>{selectedRow.rawData.description}</span>
+                  <div style={{ fontSize: '0.8rem', backgroundColor: 'var(--bg-input)', padding: '1rem', borderRadius: '8px', marginBottom: '1.5rem', border: '1px solid var(--border-color)' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: '100px 1fr', gap: '0.4rem', lineHeight: '1.5' }}>
+                      <span style={{ color: 'var(--text-muted)' }}>Description:</span>
+                      <strong style={{ color: 'var(--text-primary)' }}>{selectedRow.rawData.description}</strong>
                       <span style={{ color: 'var(--text-muted)' }}>Raw Payer:</span>
-                      <span>{selectedRow.rawData.paid_by || '(blank)'}</span>
+                      <span style={{ color: 'var(--text-primary)' }}>{selectedRow.rawData.paid_by || '(blank)'}</span>
                       <span style={{ color: 'var(--text-muted)' }}>Raw Amount:</span>
-                      <span>{selectedRow.rawData.currency} {selectedRow.rawData.amount}</span>
+                      <strong style={{ color: 'var(--text-primary)' }}>{selectedRow.rawData.currency} {selectedRow.rawData.amount}</strong>
                       <span style={{ color: 'var(--text-muted)' }}>Raw Splits:</span>
-                      <span>{selectedRow.rawData.split_with}</span>
+                      <span style={{ color: 'var(--text-primary)', wordBreak: 'break-all' }}>{selectedRow.rawData.split_with}</span>
                       {selectedRow.rawData.notes && (
                         <>
                           <span style={{ color: 'var(--text-muted)' }}>Raw Notes:</span>
@@ -467,11 +470,11 @@ export default function ImportWizard() {
                   </div>
 
                   {/* Flagged anomalies list */}
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '1.5rem' }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', marginBottom: '1.75rem' }}>
                     {selectedRow.anomalies.map((anom) => (
-                      <div key={anom.id} className="badge badge-danger" style={{ display: 'flex', padding: '0.5rem 0.75rem', borderRadius: '6px', fontSize: '0.75rem', textAlign: 'left', flexWrap: 'wrap', gap: '0.25rem', alignItems: 'center' }}>
-                        <AlertTriangle size={12} />
-                        <strong>{anom.code}:</strong> {anom.description}
+                      <div key={anom.id} className="badge badge-danger" style={{ display: 'flex', padding: '0.6rem 0.85rem', borderRadius: '8px', fontSize: '0.8rem', textAlign: 'left', flexWrap: 'wrap', gap: '0.35rem', alignItems: 'center' }}>
+                        <AlertTriangle size={14} style={{ flexShrink: 0 }} />
+                        <span><strong>{anom.code}:</strong> {anom.description}</span>
                       </div>
                     ))}
                   </div>
@@ -482,12 +485,12 @@ export default function ImportWizard() {
                     {selectedRow.anomalies.some(a => a.code === 'DUPLICATE_EXACT' || a.code === 'DUPLICATE_CONFLICTING') && (
                       <div className="form-group">
                         <label className="form-label">Duplicate Row Resolution</label>
-                        <div style={{ display: 'flex', gap: '0.75rem' }}>
-                          <label className="btn btn-secondary" style={{ flex: 1, backgroundColor: resDecision === 'KEEP' ? 'var(--primary-glow)' : 'transparent', borderColor: resDecision === 'KEEP' ? 'var(--primary)' : 'var(--border-color)' }}>
+                        <div style={{ display: 'flex', gap: '0.85rem' }}>
+                          <label className="btn btn-secondary" style={{ flex: 1, display: 'flex', gap: '0.35rem', cursor: 'pointer', backgroundColor: resDecision === 'KEEP' ? 'var(--primary-glow)' : 'rgba(255, 255, 255, 0.03)', borderColor: resDecision === 'KEEP' ? 'var(--primary)' : 'var(--border-color)' }}>
                             <input type="radio" name="dup" checked={resDecision === 'KEEP'} onChange={() => setResDecision('KEEP')} style={{ marginRight: '0.25rem' }} /> Keep Row
                           </label>
-                          <label className="btn btn-secondary" style={{ flex: 1, backgroundColor: resDecision === 'REJECT' ? 'var(--danger-bg)' : 'transparent', borderColor: resDecision === 'REJECT' ? 'var(--danger)' : 'var(--border-color)' }}>
-                            <input type="radio" name="dup" checked={resDecision === 'REJECT'} onChange={() => setResDecision('REJECT')} style={{ marginRight: '0.25rem' }} /> Reject Duplicate
+                          <label className="btn btn-secondary" style={{ flex: 1, display: 'flex', gap: '0.35rem', cursor: 'pointer', backgroundColor: resDecision === 'REJECT' ? 'var(--danger-bg)' : 'rgba(255, 255, 255, 0.03)', borderColor: resDecision === 'REJECT' ? 'var(--danger)' : 'var(--border-color)' }}>
+                            <input type="radio" name="dup" checked={resDecision === 'REJECT'} onChange={() => setResDecision('REJECT')} style={{ marginRight: '0.25rem' }} /> Reject
                           </label>
                         </div>
                       </div>
@@ -547,17 +550,17 @@ export default function ImportWizard() {
                     {selectedRow.anomalies.some(a => a.code === 'SETTLEMENT_AS_EXPENSE') && (
                       <div className="form-group">
                         <label className="form-label">Settle Payment Resolution</label>
-                        <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '0.75rem' }}>
-                          <label className="btn btn-secondary" style={{ flex: 1, backgroundColor: resDecision === 'SETTLEMENT' ? 'var(--primary-glow)' : 'transparent', borderColor: resDecision === 'SETTLEMENT' ? 'var(--primary)' : 'var(--border-color)', fontSize: '0.75rem' }}>
+                        <div style={{ display: 'flex', gap: '0.85rem', marginBottom: '1rem' }}>
+                          <label className="btn btn-secondary" style={{ flex: 1, display: 'flex', gap: '0.25rem', cursor: 'pointer', backgroundColor: resDecision === 'SETTLEMENT' ? 'var(--primary-glow)' : 'rgba(255, 255, 255, 0.03)', borderColor: resDecision === 'SETTLEMENT' ? 'var(--primary)' : 'var(--border-color)', fontSize: '0.8rem' }}>
                             <input type="radio" name="set" checked={resDecision === 'SETTLEMENT'} onChange={() => setResDecision('SETTLEMENT')} style={{ marginRight: '0.25rem' }} /> Import as Settlement
                           </label>
-                          <label className="btn btn-secondary" style={{ flex: 1, backgroundColor: resDecision === 'REJECT' ? 'var(--danger-bg)' : 'transparent', borderColor: resDecision === 'REJECT' ? 'var(--danger)' : 'var(--border-color)', fontSize: '0.75rem' }}>
-                            <input type="radio" name="set" checked={resDecision === 'REJECT'} onChange={() => setResDecision('REJECT')} style={{ marginRight: '0.25rem' }} /> Reject Row
+                          <label className="btn btn-secondary" style={{ flex: 1, display: 'flex', gap: '0.25rem', cursor: 'pointer', backgroundColor: resDecision === 'REJECT' ? 'var(--danger-bg)' : 'rgba(255, 255, 255, 0.03)', borderColor: resDecision === 'REJECT' ? 'var(--danger)' : 'var(--border-color)', fontSize: '0.8rem' }}>
+                            <input type="radio" name="set" checked={resDecision === 'REJECT'} onChange={() => setResDecision('REJECT')} style={{ marginRight: '0.25rem' }} /> Reject
                           </label>
                         </div>
                         
                         {resDecision === 'SETTLEMENT' && (
-                          <div>
+                          <div style={{ animation: 'fadeIn 0.2s' }}>
                             <label className="form-label">Who Received This Payment?</label>
                             <select className="form-input" value={resRecipientId} onChange={(e) => setResRecipientId(e.target.value)} required>
                               <option value="">Select recipient...</option>
@@ -574,11 +577,11 @@ export default function ImportWizard() {
                     {selectedRow.anomalies.some(a => a.code === 'AMOUNT_NEGATIVE') && (
                       <div className="form-group">
                         <label className="form-label">Negative Amount Resolution</label>
-                        <div style={{ display: 'flex', gap: '0.75rem' }}>
-                          <label className="btn btn-secondary" style={{ flex: 1, backgroundColor: resDecision === 'REFUND' ? 'var(--success-bg)' : 'transparent', borderColor: resDecision === 'REFUND' ? 'var(--success)' : 'var(--border-color)' }}>
+                        <div style={{ display: 'flex', gap: '0.85rem' }}>
+                          <label className="btn btn-secondary" style={{ flex: 1, display: 'flex', gap: '0.25rem', cursor: 'pointer', backgroundColor: resDecision === 'REFUND' ? 'var(--success-bg)' : 'rgba(255, 255, 255, 0.03)', borderColor: resDecision === 'REFUND' ? 'var(--success)' : 'var(--border-color)' }}>
                             <input type="radio" name="neg" checked={resDecision === 'REFUND'} onChange={() => setResDecision('REFUND')} style={{ marginRight: '0.25rem' }} /> Import as Refund
                           </label>
-                          <label className="btn btn-secondary" style={{ flex: 1, backgroundColor: resDecision === 'REJECT' ? 'var(--danger-bg)' : 'transparent', borderColor: resDecision === 'REJECT' ? 'var(--danger)' : 'var(--border-color)' }}>
+                          <label className="btn btn-secondary" style={{ flex: 1, display: 'flex', gap: '0.25rem', cursor: 'pointer', backgroundColor: resDecision === 'REJECT' ? 'var(--danger-bg)' : 'rgba(255, 255, 255, 0.03)', borderColor: resDecision === 'REJECT' ? 'var(--danger)' : 'var(--border-color)' }}>
                             <input type="radio" name="neg" checked={resDecision === 'REJECT'} onChange={() => setResDecision('REJECT')} style={{ marginRight: '0.25rem' }} /> Reject
                           </label>
                         </div>
@@ -589,16 +592,16 @@ export default function ImportWizard() {
                     {selectedRow.anomalies.some(a => a.code === 'PERCENTAGE_INVALID_SUM') && (
                       <div className="form-group">
                         <label className="form-label">Adjust Split Percentages (Sum must be 100%)</label>
-                        <div className="split-matrix" style={{ marginTop: '0.25rem' }}>
+                        <div className="split-matrix" style={{ marginTop: '0.5rem' }}>
                           {group.members.map((m: any) => {
                             const val = resSplits[m.userId] || '0%';
                             return (
-                              <div key={m.userId} className="split-row" style={{ padding: '0.25rem 0' }}>
+                              <div key={m.userId} className="split-row" style={{ padding: '0.5rem 0' }}>
                                 <span>{m.user.name}</span>
                                 <input
                                   type="text"
                                   className="form-input"
-                                  style={{ width: '60px', padding: '0.25rem', textAlign: 'right', fontSize: '0.8rem' }}
+                                  style={{ width: '70px', padding: '0.35rem 0.5rem', textAlign: 'right', fontSize: '0.85rem' }}
                                   value={val}
                                   onChange={(e) => handleInputChange(m.userId, e.target.value)}
                                 />
@@ -613,15 +616,15 @@ export default function ImportWizard() {
                     {selectedRow.anomalies.some(a => a.code === 'MEMBERSHIP_VIOLATION' || a.code === 'MEMBER_NOT_IN_GROUP') && (
                       <div className="form-group">
                         <label className="form-label">Select Active Participants on Date</label>
-                        <p style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>
+                        <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: '0.5rem' }}>
                           Toggle checkboxes to remove inactive members (e.g. Meera in April).
                         </p>
-                        <div className="split-matrix" style={{ marginTop: '0.25rem' }}>
+                        <div className="split-matrix" style={{ marginTop: '0.5rem' }}>
                           {group.members.map((m: any) => {
                             const isSelected = resSplits[m.userId] !== undefined;
                             return (
-                              <div key={m.userId} className="split-row" style={{ padding: '0.25rem 0' }}>
-                                <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
+                              <div key={m.userId} className="split-row" style={{ padding: '0.5rem 0' }}>
+                                <label style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', cursor: 'pointer', fontSize: '0.9rem' }}>
                                   <input
                                     type="checkbox"
                                     checked={isSelected}
@@ -644,7 +647,7 @@ export default function ImportWizard() {
                                   <input
                                     type="text"
                                     className="form-input"
-                                    style={{ width: '60px', padding: '0.25rem', textAlign: 'right', fontSize: '0.8rem' }}
+                                    style={{ width: '70px', padding: '0.35rem 0.5rem', textAlign: 'right', fontSize: '0.85rem' }}
                                     value={resSplits[m.userId] || ''}
                                     onChange={(e) => handleInputChange(m.userId, e.target.value)}
                                   />
@@ -657,8 +660,8 @@ export default function ImportWizard() {
                     )}
 
                     {/* Action buttons */}
-                    <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1.25rem' }}>
-                      <button type="submit" className="btn btn-primary" style={{ flex: 1 }}>
+                    <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1.5rem' }}>
+                      <button type="submit" className="btn btn-primary" style={{ flex: 1, padding: '0.75rem' }}>
                         Save Resolution
                       </button>
                     </div>
@@ -666,10 +669,10 @@ export default function ImportWizard() {
                 </div>
               ) : (
                 /* No row selected: Show commit summary panel */
-                <div className="card" style={{ border: '1px solid var(--border-color)', textAlign: 'center', padding: '2rem 1.5rem' }}>
-                  <CheckCircle2 size={36} style={{ color: session.heldRows > 0 ? 'var(--text-muted)' : 'var(--success)', marginBottom: '1rem', marginInline: 'auto' }} />
-                  <h3>All Set to Commit</h3>
-                  <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginTop: '0.5rem', marginBottom: '1.5rem' }}>
+                <div className="card" style={{ border: '1px solid var(--border-color)', textAlign: 'center', padding: '3rem 2rem', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                  <CheckCircle2 size={48} style={{ color: session.heldRows > 0 ? 'var(--text-muted)' : 'var(--success)', marginBottom: '1.25rem', strokeWidth: 1.5 }} />
+                  <h3 style={{ fontSize: '1.35rem', fontWeight: 600 }}>All Set to Commit</h3>
+                  <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginTop: '0.5rem', marginBottom: '2rem', lineHeight: '1.6', maxWidth: '340px' }}>
                     {session.heldRows > 0 
                       ? `There are still ${session.heldRows} held rows that require anomaly resolution before you can commit the import.` 
                       : 'All anomalies have been successfully resolved. You can now commit the CSV data atomically into your group history.'
@@ -678,7 +681,7 @@ export default function ImportWizard() {
                   <button
                     onClick={handleCommitImport}
                     className="btn btn-primary"
-                    style={{ width: '100%' }}
+                    style={{ width: '100%', padding: '0.75rem' }}
                     disabled={session.heldRows > 0}
                   >
                     Commit Import Atomically

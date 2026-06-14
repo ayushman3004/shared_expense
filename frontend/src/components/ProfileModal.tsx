@@ -138,19 +138,19 @@ export default function ProfileModal({ isOpen, onClose, onSuccess, user }: Profi
               />
             </div>
 
-            <div style={{ borderTop: '1px solid var(--border-color)', paddingTop: '1rem', marginTop: '1rem' }}>
-              <h4 style={{ fontSize: '0.9rem', color: 'var(--danger)', marginBottom: '0.5rem' }}>Danger Zone</h4>
-              <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginBottom: '0.75rem' }}>
+            <div style={{ border: '1px solid var(--danger-border)', backgroundColor: 'rgba(239, 68, 68, 0.02)', padding: '1.25rem', borderRadius: '8px', marginTop: '1.75rem' }}>
+              <h4 style={{ fontSize: '0.95rem', color: 'var(--danger)', marginBottom: '0.4rem', fontWeight: 600 }}>Danger Zone</h4>
+              <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '1rem', lineHeight: '1.4' }}>
                 Deactivating your account soft-deletes your credentials and logs you out immediately.
               </p>
               <button
                 type="button"
                 onClick={handleDeactivate}
                 className="btn btn-danger btn-sm"
-                style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}
+                style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}
                 disabled={submitting}
               >
-                <Trash2 size={12} /> Deactivate Account
+                <Trash2 size={14} /> Deactivate Account
               </button>
             </div>
           </div>
